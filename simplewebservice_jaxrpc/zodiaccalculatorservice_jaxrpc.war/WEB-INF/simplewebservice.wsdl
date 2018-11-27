@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<definitions name="simplewebservice" targetNamespace="http://deba.org/wsdl" xmlns:tns="http://deba.org/wsdl" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <types/>
+  <message name="SimpleWebService_getName">
+    <part name="String_1" type="xsd:string"/></message>
+  <message name="SimpleWebService_getNameResponse">
+    <part name="result" type="xsd:string"/></message>
+  <portType name="SimpleWebService">
+    <operation name="getName" parameterOrder="String_1">
+      <input message="tns:SimpleWebService_getName"/>
+      <output message="tns:SimpleWebService_getNameResponse"/></operation></portType>
+  <binding name="SimpleWebServiceBinding" type="tns:SimpleWebService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc"/>
+    <operation name="getName">
+      <soap:operation soapAction=""/>
+      <input>
+        <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" use="encoded" namespace="http://deba.org/wsdl"/></input>
+      <output>
+        <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" use="encoded" namespace="http://deba.org/wsdl"/></output></operation></binding>
+  <service name="Simplewebservice">
+    <port name="SimpleWebServicePort" binding="tns:SimpleWebServiceBinding">
+      <soap:address location="REPLACE_WITH_ACTUAL_URL"/></port></service></definitions>

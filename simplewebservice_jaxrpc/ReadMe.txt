@@ -1,0 +1,1 @@
+http://localhost:8080/SimpleWebService_jaxrpc/simplewebservice?WSDL

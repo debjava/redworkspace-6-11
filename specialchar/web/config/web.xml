@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+  <servlet>
+    <servlet-name>specialchar</servlet-name>
+    <display-name>specialchar</display-name>
+    <description>specialchar</description>
+    <servlet-class>com.iit.rnd.server.specialchar.SpecialCharAjaxServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>savespecialchar</servlet-name>
+    <display-name>savespecialchar</display-name>
+    <description>savespecialchar</description>
+    <servlet-class>com.iit.rnd.server.specialchar.AjaxSaveServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <servlet-name>fileupload</servlet-name>
+    <display-name>fileupload</display-name>
+    <description>fileupload</description>
+    <servlet-class>com.iit.rnd.server.specialchar.CommonsFileUploadServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+    <servlet-name>specialchar</servlet-name>
+    <url-pattern>/specialchar</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>savespecialchar</servlet-name>
+    <url-pattern>/savespecialchar</url-pattern>
+  </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>fileupload</servlet-name>
+    <url-pattern>/fileupload</url-pattern>
+  </servlet-mapping>
+  
+  <welcome-file-list>
+    <welcome-file>check1.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>

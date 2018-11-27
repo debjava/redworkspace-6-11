@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<endpoints xmlns='http://java.sun.com/xml/ns/jax-rpc/ri/runtime' version='1.0'>
+  <endpoint
+    name="simplewebservice"
+    interface="com.ddlab.webservice.jaxrpc.SimpleWebService"
+    implementation='com.ddlab.webservice.jaxrpc.SimpleWebServiceImpl'
+    tie="com.ddlab.webservice.jaxrpc.SimpleWebService_Tie"
+    model="/WEB-INF/model-wsdl-rpcenc.xml.gz"
+    wsdl="/WEB-INF/simplewebservice.wsdl"
+    service="{http://deba.org/wsdl}simplewebservice"
+    port="{http://deba.org/wsdl}simplewebservice"
+    urlpattern="/simplewebservice"/>
+</endpoints>
+

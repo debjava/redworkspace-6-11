@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Organisation>
+    <Name>DDSOFT</Name>
+    <TotalEmployees>600</TotalEmployees>
+    <TurnOver>12345.67</TurnOver>
+    <Type>Software Development</Type>
+    <Emp Age="23" Name="Deba">
+        <Id>A007</Id>
+        <Salary>123.45</Salary>
+        <Address Type="Permanent">
+            <City>Bangalore</City>
+            <Country>India</Country>
+            <StreetName>Marathahlly</StreetName>
+        </Address>
+        <Project id="11">
+			<Name>Test</Name>
+			<Type>Software</Type>
+			<Client id="a1">
+				<Address Type="Permanent">
+					<City>Bangalore</City>
+					<Country>India</Country>
+					<StreetName>Marathahlly</StreetName>
+				</Address>
+			</Client>
+        </Project>
+        <Project id="12">
+			<Name>Test11</Name>
+			<Type>Hardware</Type>
+			<Client id="a1">
+				<Address Type="Present">
+					<City>California</City>
+					<Country>US</Country>
+					<StreetName>Dalas Street</StreetName>
+				</Address>
+			</Client>
+        </Project>
+    </Emp>
+    <Emp Age="23" Name="Deba">
+        <Id>A008</Id>
+        <Salary>123.45</Salary>
+        <Address Type="Permanent">
+            <City>Bangalore</City>
+            <Country>India</Country>
+            <StreetName>Marathahlly</StreetName>
+        </Address>
+    </Emp>
+    
+</Organisation>

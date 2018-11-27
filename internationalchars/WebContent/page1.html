@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<title>Test JSP Page for International Characters</title>
+
+<script type="text/javascript">
+
+   var serverUrl = "/internationalchars/internationalchars";
+   var serverUrlSave2DB = "/internationalchars/Save2DBServlet";
+   var serverUrlRetrieveFromDB = "/internationalchars/RetrieveFromDBServlet";
+   
+   funcation saveToDB()
+   {
+       var textDatValue = document.getElementById("textDataId").value;
+        var textDatValue1 = toUnicode(textDatValue);
+        var timestamp = new Date();
+        var requestUrl = serverUrlSave2DB+"?textdata="+textDatValue1+"&timestamp="+timestamp.getTime();
+        alert(requestUrl);
+        var ajaxReq = getXmlHttpRequest();
+        var pingStatus = processSynchronousPing( ajaxReq , requestUrl );
+        document.getElementById("displayTextDataId").value = pingStatus;     
+   }
+   
+   function retrieveFromDB()
+   {
+         var textDatValue = document.getElementById("textDataId").value;
+         var textDatValue1 = toUnicode(textDatValue);
+         var timestamp = new Date();
+         var requestUrl = serverUrlRetrieveFromDB+"?textdata="+textDatValue1+"&timestamp="+timestamp.getTime();
+         var ajaxReq = getXmlHttpRequest();
+         var pingStatus = processSynchronousPing( ajaxReq , requestUrl );
+         document.getElementById("displayTextDataId").value = pingStatus;   
+   }
+   
+    function populate()
+    {
+        document.getElementById("displayTextDataId").value=document.getElementById("textDataId").value;
+    }
+    
+    function toUnicode(theString) 
+    {
+          var unicodeString = '';
+          for (var i=0; i < theString.length; i++) {
+            var theUnicode = theString.charCodeAt(i).toString(16).toUpperCase();
+            while (theUnicode.length < 4) {
+              theUnicode = '0' + theUnicode;
+            }
+            theUnicode = '\\u' + theUnicode;
+            unicodeString += theUnicode;
+          }
+          return unicodeString;
+    }
+    
+    function ajaxpopulate()
+    {
+        var textDatValue = document.getElementById("textDataId").value;
+        var textDatValue1 = toUnicode(textDatValue);
+        var timestamp = new Date();
+        var requestUrl = serverUrl+"?textdata="+textDatValue1+"&timestamp="+timestamp.getTime();
+        var ajaxReq = getXmlHttpRequest();
+        var pingStatus = processSynchronousPing( ajaxReq , requestUrl );
+        document.getElementById("displayTextDataId").value = pingStatus;
+    }
+    
+    function processSynchronousPing(ajaxReq,serverUrl)
+    {
+        var pingStatus = false;
+        ajaxReq.onreadystatechange=function()
+        {
+            if (ajaxReq.readyState==4 && ajaxReq.status==200)
+            {
+                var textData = ajaxReq.responseText;
+                if( textData != "" )
+                {
+                    pingStatus = textData;
+                }
+                else
+                {
+                    pingStatus = false;
+                }
+            }
+        }
+        ajaxReq.open("GET",serverUrl,false);//For synchronous call
+        ajaxReq.send(null);//For synchronous call
+        return pingStatus;
+    }
+    
+    function getXmlHttpRequest()
+    {
+        var xmlhttp;
+        if (window.XMLHttpRequest) 
+        {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        }
+        else 
+        {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        return xmlhttp;
+    }
+    
+</script>
+
+
+</head>
+<body>
+
+<form name="form1" method="get" action="?" enctype="application/x-www-form-urlencoded">
+   <div style="position: absolute;left: 0px;top: 20px; width: 800px; height: 220px;">
+      <fieldset>
+        <legend>Enter below some text in any international language &nbsp;</legend>
+        <table>
+         
+            <tr> 
+              <td>Enter text data:</td>
+              <td>
+                <textarea rows="8" cols="65" name="?" id="textDataId" maxlength="150"></textarea>
+              </td>
+            </tr>
+            <tr>
+                <td/>
+                <td>
+                    <input type="button" name="jssubmit" value="Javascript Submit" onclick="populate();"/>
+                    <input type="button" name="ajaxsubmit" value="Ajax Submit" onclick="ajaxpopulate();"/>
+                    <input type="button" name="save" value="Save to DB" onclick="saveToDB();"/>
+                    <input type="button" name="retrieve" value="Retrieve from DB" onclick="retrieveFromDB();"/>
+                    <input type="button" name="clear" value="Clear (DB also)" onclick="clearAll();"/>
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+   </div>
+    <div style="position: absolute;left: 0px;top: 250px; width: 800px; height: 220px;">
+      <fieldset>
+        <legend>Display of entered international characters &nbsp;</legend>
+        <table>
+            <tr> 
+              <td>Text data:</td>
+              <td>
+                <textarea rows="8" cols="65" name="?" id="displayTextDataId"></textarea>
+              </td>
+            </tr>
+        </table>
+    </fieldset>
+    </div>
+    
+    
+</form>
+
+
+</body>
+</html>

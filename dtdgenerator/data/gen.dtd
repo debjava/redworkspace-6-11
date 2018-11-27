@@ -1,0 +1,33 @@
+<!ELEMENT Address ( City, Country, StreetName ) >
+<!ATTLIST Address Type NMTOKEN #REQUIRED >
+
+<!ELEMENT City ( #PCDATA ) >
+
+<!ELEMENT Client ( Address ) >
+<!ATTLIST Client id NMTOKEN #REQUIRED >
+
+<!ELEMENT Country ( #PCDATA ) >
+
+<!ELEMENT Emp ( Id, Salary, Address, Project* ) >
+<!ATTLIST Emp Age NMTOKEN #REQUIRED >
+<!ATTLIST Emp Name NMTOKEN #REQUIRED >
+
+<!ELEMENT Id ( #PCDATA ) >
+
+<!ELEMENT Name ( #PCDATA ) >
+
+<!ELEMENT Organisation ( Name, TotalEmployees, TurnOver, Type, Emp+ ) >
+
+<!ELEMENT Project ( Name, Type, Client ) >
+<!ATTLIST Project id NMTOKEN #REQUIRED >
+
+<!ELEMENT Salary ( #PCDATA ) >
+
+<!ELEMENT StreetName ( #PCDATA ) >
+
+<!ELEMENT TotalEmployees ( #PCDATA ) >
+
+<!ELEMENT TurnOver ( #PCDATA ) >
+
+<!ELEMENT Type ( #PCDATA ) >
+

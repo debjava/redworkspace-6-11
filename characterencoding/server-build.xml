@@ -1,0 +1,82 @@
+<!--
+	This is a generic ant build script for building the server side code.
+	Upon running the script, it will create a war file and you can
+	deploy in any application server.
+	Author : Debadatta Mishra
+	Project Name : posserver
+-->
+<project name="applicationName" default="createEAR" basedir=".">
+
+	<basename property="basedir.name"                   file="${basedir}"/>
+	<property name="server.src.dir" 					value="${basedir}/src" />
+	<property name="bin.dir" 							value="${basedir}/bin" />
+	<property name="lib.dir" 							value="${basedir}/lib" />
+	<property name="dist.dir" 							value="${basedir}/dist" />
+	<property name="server.config.dir" 					value="${basedir}/web/config" />
+	<property name="war.dir" 							value="${basedir}/${basedir.name}.war" />
+	<property name="ear.dir"                           value="${basedir}/${basedir.name}.ear" />
+	<property name="webinf.dir" 						value="${war.dir}/WEB-INF" />
+	<property name="webinf.classes.dir" 				value="${war.dir}/WEB-INF/classes" />
+	<property name="webinf.lib.dir" 					value="${war.dir}/WEB-INF/lib" />
+
+	<!-- Setting the class path -->
+	<path id="classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Cleaning operation to delete the files and folders -->
+	<target name="clean">
+		<delete dir="${war.dir}" />
+		<delete dir="${ear.dir}" />
+		<delete dir="${dist.dir}" />
+		<delete dir="${bin.dir}" />
+	</target>
+
+	<!-- Initialization process to create the necessary directories -->
+	<target name="init" depends="clean">
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${dist.dir}" />
+		<mkdir dir="${war.dir}" />
+		<mkdir dir="${ear.dir}" />
+		<mkdir dir="${webinf.classes.dir}" />
+		<mkdir dir="${webinf.lib.dir}" />
+	</target>
+
+	<!-- Compiling the server side source and creation of jar file -->
+	<target name="compile" depends="init">
+		<echo message="classpath" />
+		<javac srcdir="${server.src.dir}" destdir="${bin.dir}" classpathref="classpath" source="1.5" target="1.5"/>
+		<jar destfile="${dist.dir}/${basedir.name}.jar" basedir="${bin.dir}" />
+		<copy todir="${webinf.lib.dir}" flatten="true">
+			<fileset dir="${lib.dir}" includes="**/*.jar" excludes="**/servlet-api.jar" />
+			<fileset dir="${dist.dir}">
+				<include name="**/*.jar" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<!-- Creation of war file -->
+	<target name="createwar" depends="compile">
+		<copy todir="${webinf.dir}" flatten="true">
+			<fileset dir="${server.config.dir}" includes="**/*.xml" />
+		</copy>
+		<copy todir="${war.dir}" flatten="true">
+			<fileset dir="${basedir}/web/jsp" includes="**/*.*" />
+		</copy>
+		<jar destfile="${dist.dir}/${basedir.name}.war" basedir="${war.dir}" />
+	</target>
+	
+	<!-- Creation of EAR File -->
+	<target name="createEAR" depends="createwar">
+		<copy todir="${ear.dir}">
+			<fileset file="${dist.dir}/${basedir.name}.war"></fileset>
+		</copy>
+		<copy todir="${ear.dir}/META-INF">
+		   <fileset file="${basedir}/application.xml"/>
+		</copy>
+		<jar destfile="${dist.dir}/${basedir.name}.ear" basedir="${ear.dir}" />
+	</target>
+</project>
+

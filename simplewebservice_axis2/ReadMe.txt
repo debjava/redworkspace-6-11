@@ -1,0 +1,1 @@
+http://localhost:8080/simplewebservice/services/simplewebservice?wsdl

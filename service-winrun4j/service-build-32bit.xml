@@ -1,0 +1,108 @@
+<project name="myservicecreation" basedir="." default="create.exe"> 
+
+	<property name="src.dir"                                       value="${basedir}/src" />
+	<property name="bin.dir"                                       value="${basedir}/bin" />
+	<property name="lib.dir"                                       value="${basedir}/lib" />
+	<property name="config.dir"                                    value="${basedir}/config" />
+	<property name="images.dir"                                    value="${basedir}/images" />
+	<property name="dist.dir"                                      value="${basedir}/dist" />
+	<property name="nsis.exe"                                      value="C:/Program Files/NSIS/makensis.exe" /> <!-- Path for NSIS -->
+	<property name="setup.dir"                                     value="${basedir}/setup" /> <!-- Setup dir -->
+	<property name="servicesw.dir"                                 value="${basedir}/softwares/nssm-2.7" /> <!-- Setup dir -->
+	<property name="launch4j.dir"                                  value="${basedir}/exebuilder/launch4j" />
+	
+	<!-- <basename property="basedir.name"                              file="${basedir}"/> -->
+	<property name="basedir.name"                                  value="ServiceRunner" />  
+	
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="*.jar" />
+		<fileset dir="${lib.dir}" includes="**/*.jar" />
+	</path>
+
+	<!-- Cleaning of directories -->
+	<target name="clean">
+		<delete dir="${bin.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
+
+	<!-- Creation of necessary directories -->
+	<target name="init" depends="clean">
+		<mkdir dir="${bin.dir}" />
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<!-- Compilation of sources -->
+	<target name="compile" depends="init">
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" debug="on" fork="true" classpathref="classpath" source="1.5" target="1.5"/>
+	</target>
+	
+	<!-- Creation of jar -->
+	<target name="create.jar" depends="compile">
+		<copy todir="${bin.dir}" file="${config.dir}/log4j.properties"/>
+		<copy todir="${dist.dir}/config" >
+			<fileset dir="${config.dir}" includes="*.*"/>
+		</copy>
+		<copy todir="${dist.dir}/images" >
+            <fileset dir="${images.dir}" includes="*.*"/>
+        </copy>
+		
+		<copy todir="${dist.dir}/lib">
+			<fileset dir="${lib.dir}" excludes="*.txt"/>
+		</copy>
+		
+		<tstamp prefix="start"/>
+		<jar destfile="${dist.dir}/${ant.project.name}.jar" basedir="${bin.dir}" >
+			 <manifest>
+				<attribute name="Specification-Title"			value="Service Runner" />
+				<attribute name="Specification-Version"			value="1.1" />
+				<attribute name="Implementation-Vendor-Id"		value="com.ddlab" />
+				<attribute name="Implementation-Vendor"			value="DDLAB INC" />
+				<attribute name="Specification-Vendor"			value="DDLAB INC" />
+
+				<attribute name="Main-Class"					value="com.ddlab.rnd.service.StartService" />
+				<attribute name="Class-Path"					value="lib/log4j-1.2.16.jar" />
+				<attribute name="Sealed"						value="true" />
+				<attribute name="Author"						value="Debadatta Mishra" />
+			 	
+			 	<!-- Build Information -->
+                <attribute name="Build-ID"                      value="${start.DSTAMP}-${start.TSTAMP}" />
+                <attribute name="Build-Date"                    value="${start.TODAY}" />
+                <attribute name="Base-Version"                  value="3.0.0.0" />
+			</manifest>
+		</jar>	
+	</target>
+	
+	<!--  Exe creation using Launch4j -->
+	<!-- For 64 bit build -->
+    <target name="create.exe"  depends="create.jar" description="Creation of Executable using winrun4j">
+        
+        <copy file="${basedir}/exebuilder/winrun4j/bin/RCEDIT64.exe" tofile="${dist.dir}/RCEDIT64.exe"/>
+        <copy file="${basedir}/exebuilder/winrun4j/bin/WinRun4J64.exe" tofile="${dist.dir}/${basedir.name}.exe"/>
+        <copy file="${basedir}/exebuilder/appconfig/testrun.ini" tofile="${dist.dir}/${basedir.name}.ini"/>
+        <copy file="${basedir}/exebuilder/appconfig/testrun.ico" tofile="${dist.dir}/${basedir.name}.ico"/>
+        
+        <exec executable="${dist.dir}/RCEDIT64.exe">
+            <arg value="/I"/>
+            <arg value="${dist.dir}/${basedir.name}.exe"/>
+            <!-- <arg value="${dist.dir}/${basedir.name}.ico"/> -->
+        	<arg value="${basedir}/images/${basedir.name}.ico"/>
+          </exec>
+    </target>
+	
+	
+	<!--
+	<target name="check.nsis.file">
+		<available property="file.exists" file="${nsis.exe}" value=""></available>
+	</target>
+	-->
+	<!-- Generate the executable using NSIS -->
+	
+	<!-- Temporarily Commented Out-->
+	<!--
+	<target name="generate.exe" depends="create.jar,check.nsis.file" if="file.exists">
+	  <exec executable="${nsis.exe}">
+	    <arg value="${setup.dir}/EDISetup.nsi"/>
+	  </exec>
+	</target>
+    -->
+</project>

@@ -1,0 +1,159 @@
+<html>
+<head>
+<title>Ajax File Upload</title>
+<script type="text/javascript" src="jquery/jquery-1.5.1.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.form.js"></script>
+<script>
+function showResponse(responseText, statusText, xhr, $form)  
+{ 
+alert("Response called");
+    alert('status: ' + statusText + '\n\nresponseText: \n' + responseText + 
+        '\n\nThe output div should have already been updated with the responseText.'); 
+} 
+
+
+	function upload()
+	{
+		var serverUrl = "/specialchar/fileupload";
+		var form = document.forms["form1"];
+		//alert( form );
+		//form.submit();
+		alert("------------");
+		//$('#myForm1').submit({target: $('#response')});
+		
+		
+		var options = { 
+        success:showResponse 
+    }; 
+		
+		
+		
+		
+		
+		$('#myForm1').ajaxSubmit(function(responseText,statusText) { 
+                alert("Thank you for your comment!"+responseText+statusText); 
+				return false; 
+            }); 
+		
+		/*
+		alert($('#myForm1'));
+		$("#myForm1").submit(function() {
+			alert('Handler for .submit() called.');
+			return false;
+		});
+		*/
+		/*
+		 $.ajax({ type: "POST",   
+                 url: serverUrl,
+				context: document.body,		
+                 async: false,
+                 success : function(text)
+                 {
+                     response = text;
+                     alert(response);
+                 }
+        });
+		*/
+		
+		/*
+		form.setAttribute("target","micox-temp");
+		form.setAttribute("action",serverUrl);
+		form.setAttribute("method","post");
+		form.setAttribute("enctype","multipart/form-data");
+		form.setAttribute("encoding","multipart/form-data");
+		
+		var ajaxReq = getXmlHttpRequest();
+		var pingStatus = processAjaxFileUpload(ajaxReq, serverUrl );
+		alert(pingStatus);
+		*/
+	}
+	
+	function processAjaxFileUpload( ajaxReq, serverUrl ,data)
+	{
+		//var boundary = "AJAX-----------------------" + (new Date).getTime();
+		 //var contentType = "multipart/form-data; boundary=" + boundary;
+		 
+		 var filenameTimestamp = (new Date().getTime());
+		var separator = "----------12345-multipart-boundary-" + filenameTimestamp;
+				 
+		var pingStatus = false;
+		ajaxReq.onreadystatechange = function() {
+			if (ajaxReq.readyState == 4 && ajaxReq.status == 200) {
+				var textData = ajaxReq.responseText;
+				if (textData != "") {
+					pingStatus = textData;
+				} else {
+					pingStatus = false;
+				}
+			}
+		}
+		ajaxReq.open("GET", serverUrl, false);//For synchronous call
+		
+		//ajaxReq.setRequestHeader("Content-type", "multipart/form-data"); 
+		//ajaxReq.setRequestHeader("Content-type","multipart/form-data");
+		 //ajaxReq.setRequestHeader("Content-Type", contentType);
+		 
+		 //ajaxReq.setRequestHeader("Content-type", "multipart/form-data; boundary=" + separator);
+		 
+		  //ajaxReq.setRequestHeader("content-disposition", "form-data; name=txtFile;filename=a.TXT" + separator);
+		 //content-disposition: form-data; name="txtFile"; filename="a.TXT"
+		 
+		 
+		//ajaxReq.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		//ajaxReq.setRequestHeader("enctype","multipart/form-data");
+		//ajaxReq.setRequestHeader("Content-length", postParams.length);
+		//ajaxReq.setRequestHeader("Connection", "close");
+		ajaxReq.send();//For synchronous call
+		return pingStatus;
+	}	
+
+
+	
+	function getXmlHttpRequest() 
+	{
+		var xmlhttp;
+		if (window.XMLHttpRequest) 
+		{
+			// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		}
+		else {
+			// code for IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		return xmlhttp;
+	}
+
+</script>
+
+<script>
+	function ajaxupload()
+	{
+		$('#form2').ajaxSubmit(function(responseText,statusText) { 
+                alert(responseText+statusText); 
+				return false; 
+            }); 
+	}
+</script>
+
+</head>
+<body>
+	<!-- <iframe id="uploadFrameID" name="uploadFrame" height="0" width="0" frameborder="0" scrolling="yes"></iframe> -->
+	
+	<iframe id="uploadFrameID" name="uploadFrame" height="05" width="05" frameborder="2" scrolling="yes"></iframe>
+
+	<form id="myForm1" enctype="multipart/form-data" method="post" name="form1" target="uploadFrame" action="/specialchar/fileupload" >
+		<input type="file" name="txtFile" id="txtFile" /><br/>
+		<input type="submit" id="mysubmitID" name="mysubmit" value="Submit"/>
+		<input type="button" id="mysubmitID11" name="mysubmit11" value="MyUpload11" onclick="upload();"/>
+	</form>
+	
+	<br/>
+	
+	<form id="form2" enctype="multipart/form-data" method="post" name="form1" action="/specialchar/fileupload" >
+		<input type="file" name="txtFile" id="txtFile1" /><br/>
+		<input type="button" id="btn1" name="testsubmit" value="Test Upload" onclick="ajaxupload();"/>
+	</form>
+	
+</body>
+</html>
